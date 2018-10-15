@@ -1,8 +1,12 @@
-# mpcformat/tests/test_leapsec.py
+# mpcformat/tests/test_mpcdata.py
 # import pytest
 
 # Third-party imports
 import json
+import os
+
+# Import other required local modules/functions
+import mpcdata.params as params
 
 # Import the specific package/module/function we are testing
 import mpcdata.mpcdata as mpcdata

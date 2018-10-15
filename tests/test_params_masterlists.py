@@ -13,7 +13,7 @@ def test_required_dictionaries_exist():
     """
     Does params_masterlists.py contain all of the required dictionaries ?
     """
-    assert hasattr(params, 'urlIDDict')
+    assert hasattr(params_masterlists, 'urlIDDict')
 
 
 
@@ -21,7 +21,7 @@ def test_required_urls_exist_for_master_lists():
     """
     Does urlDict contain the required paths ?
     """
-    for subDict in params.urlIDDict:
+    for key, subDict in params_masterlists.urlIDDict.items():
         for item in ['Zenodo','Google','MPC']:
             assert item in subDict
             # assert subDict[item] # <<-- Want to add in a check on CONTENT of VALUES

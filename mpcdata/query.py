@@ -1,12 +1,13 @@
 # mpcdata/mpcdata/query.py
 
 # Third-party imports
+import sys
 import json
 import urllib.request
 import requests
 
 # Import local modules
-import params as params
+import mpcdata.params as params
 
 
 """
@@ -39,19 +40,23 @@ def download_master(master_type):
     masterDict = failureDict.copy()
     
     # Get the urls that need to be looked at
-    thisURLDict = params.urlDict[master_type]
+    thisURLDict = params.urlIDDict[master_type]
     
     # We are going to try downloading the data from Zenodo/Google/MPC
     for archive in params.archiveNameList: # I.e. looping over Zenodo/Google/MPC
         # Attempt to download
         attempts = 0
         while masterDict == failureDict and attempts < params.downloadSpecDict['attemptsMax'] :
-            masterDict = query_Master_Archive(archive)
+            masterDict = query_Master_Archive(master_type , archive)
             attempts   += 1
 
     # Did any of the download-attempts succeed?
-    if masterDict == failureDict:
-        sys.exit()
+    try:
+        assert masterDict != failureDict
+    except Exception as e:
+        print(type(e))
+        #print("Failed to download anything for %s: likely because archive not recognized" % archive )
+        sys.exit("Failed to download anything for %s: likely because archive not recognized" % archive )
     
     return masterDict
 
@@ -77,7 +82,6 @@ def download_master(master_type):
 def query_Master_Archive(master_type , archive):
     # Default to failure ...
     masterDict  = failureDict.copy()
-    print(params.urlIDDict[master_type][archive])
     
     if archive == 'Zenodo':
         try:
@@ -92,8 +96,8 @@ def query_Master_Archive(master_type , archive):
             # Download the specific JSON containing the latest master-list
             masterDict  = read_json_from_url(latestURL)
         
-        except:
-            sys.exit("Failed to download from %s for %s" % (params.urlDict[archive] , archive) )
+        except Exception as e:
+            print(type(e))
 
     if archive == 'Google':
         try:
@@ -105,18 +109,21 @@ def query_Master_Archive(master_type , archive):
             # Convert master-list to dictionary format
             masterDict = response.json()
 
-        except:
-            sys.exit("Failed to download from %s for %s" % (params.urlDict[archive] , archive) )
+        except Exception as e:
+            print(type(e))
 
     if archive == 'MPC':
         try:
             pass
         
-        except:
-            sys.exit("Failed to download from %s for %s" % (params.urlDict[archive] , archive) )
+        except Exception as e:
+            print(type(e))
 
-    if masterDict == failureDict:
-        sys.exit("Failed to download anything for %s: likely because archive not recognized" % archive )
+    try:
+        assert masterDict != failureDict
+    except Exception as e:
+        print("Failed to download anything for %s: likely because archive not recognized" % archive )
+        print(type(e))
 
     return masterDict
 

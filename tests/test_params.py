@@ -5,8 +5,8 @@
 import os
 
 # Import the specific package/module/function we are testing
-# import mpcdata.params as params
-from .context import mpcdata
+import mpcdata.params as params
+# from .context import mpcdata
 
 def test_required_dictionaries_exist():
     """
@@ -36,12 +36,14 @@ def test_expected_directory_paths():
     externalDir = os.path.join(topDir, 'share','data_external')
     internalDir = os.path.join(topDir, 'share','data_internal')
     testDir     = os.path.join(topDir, 'share','data_test')
+    devDir      = os.path.join(topDir, 'share','data_dev')
     
     assert topDir       == params.dirDict['top']
     assert shareDir     == params.dirDict['share']
     assert externalDir  == params.dirDict['external']
-    assert internalDir  == params.dirDict['external']
-    assert testDir      == params.dirDict['external']
+    assert internalDir  == params.dirDict['internal']
+    assert testDir      == params.dirDict['test']
+    assert devDir       == params.dirDict['dev']
 
 
 def test_required_filepaths_are_defined():

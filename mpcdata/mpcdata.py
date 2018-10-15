@@ -1,10 +1,13 @@
 # Third-party imports
 import os
+import pickle
 #from functools import lru_cache
 
 # Local imports
-from . import params
-from . import query
+#from . import params
+#from . import query
+import mpcdata.params as params
+import mpcdata.query as query
 
 """
     Master file object:
@@ -38,12 +41,12 @@ class MPCMasterFile(object):
         """
     def __init__(self, master_type):#, **kwds):
         # Initiating does *EVERYTHING*, including calling "get_masterDict()"
-        if master_type in fileDict:
+        if master_type in params.fileDict:
             self.master_type =  master_type
         else:
-            sys.exit("Supplied master_type, %s, is not in fileDict" % master_type )
+            sys.exit("Supplied master_type, %s, is not in params.fileDict" % master_type )
         self.filepath    = params.fileDict[self.master_type]
-        self.masterDict  = self.get_masterDict(self.filepath, self.master_type)
+        self.masterDict  = self.get_masterDict()
     
     def __str__(self):
         return 'MPCFileObject class : %s' % self.filename
@@ -77,7 +80,7 @@ class MPCMasterFile(object):
             
             # Save locally
             if len(masterDict) > 0:
-                pickle.dump( masterDict, open( filepath, "wb" ) )
+                pickle.dump( masterDict, open( self.filepath, "wb" ) )
         
         # Open local file
         return pickle.load( open( self.filepath, "rb" ) )
@@ -125,7 +128,7 @@ class MPCFile(MPCMasterFile):
         return 'MPCFileObject class : %s' % self.filename
 
     #@lru_cache(maxsize=params.maxcache)
-    def set_master(filename):
+    def set_master(self, filename):
         # Default values
         master_type = str(None)
         masterDict  = {}
