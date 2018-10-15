@@ -1,6 +1,8 @@
+# Third-party imports
 import os
 
-import params_masterlists
+# Import neighboring packages
+from . import params_masterlists
 
 """
 Dictionary containing hard-coded urls at which the master-lists can be found
@@ -8,7 +10,7 @@ Once the master-lists are accessed, other files can be downloaded
 The first part of the tuple is the main url stem, the later is an end/ID 
    ---   (gets used differently depending on application)
    
-urlIDDict kept in a separate file "params_masterlists.py"
+*** urlIDDict kept in a separate file "params_masterlists.py" ***
    ---   This is to accommodate regular updates of the contents
 """
 urlIDDict = params_masterlists.urlIDDict

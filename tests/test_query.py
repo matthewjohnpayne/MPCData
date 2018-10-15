@@ -68,7 +68,6 @@ def test_read_json_from_url():
     assert 'files' in JSON_object
 
 
-    https://drive.google.com/open?id=1XZ-M-b5XE_MkHlGiwlDL-7J7e9mKtQzh
 
 def test_data_item_download():
     """
@@ -81,7 +80,9 @@ def test_data_item_download():
     with open(itemFILEPATH,'r') as fh:
         data = fh.readlines()
     IN = False
-    for item in data: if '2272060800' in item: IN = True
+    for item in data:
+        if '2272060800' in item:
+            IN = True
     assert IN
     print(data)
 

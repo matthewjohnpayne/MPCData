@@ -1,8 +1,88 @@
+# Third-party imports
 import os
 #from functools import lru_cache
 
-import query
-import params
+# Local imports
+from . import params
+from . import query
+
+"""
+    Master file object:
+    - Provides dictionary of online locations from which specific data can be downloaded
+    
+    If master-file does *NOT* exist, attempts to dowload
+    Once master-file exists, provides look-up dictionary, "masterDict"
+    
+    #  Not super-necessary to have it as an object, is barely used ...
+    
+    """
+class MPCMasterFile(object):
+    
+    """
+        Instantiates & populates an instance of an MPCMasterFile object
+        - masterDict is the content of most-interest
+        
+        Parameters
+        ----------
+        master_type : ...
+        
+        Returns
+        -------
+        self.filepath : ...
+        self.masterDict : ...
+        
+        Examples
+        --------
+        >>> ...
+        
+        """
+    def __init__(self, master_type):#, **kwds):
+        # Initiating does *EVERYTHING*, including calling "get_masterDict()"
+        if master_type in fileDict:
+            self.master_type =  master_type
+        else:
+            sys.exit("Supplied master_type, %s, is not in fileDict" % master_type )
+        self.filepath    = params.fileDict[self.master_type]
+        self.masterDict  = self.get_masterDict(self.filepath, self.master_type)
+    
+    def __str__(self):
+        return 'MPCFileObject class : %s' % self.filename
+    
+    
+    """
+        Download and/or open a file containing the master-list of data sources
+        
+        Parameters
+        ----------
+        filename : ...
+        master_type : ...
+        
+        Returns
+        -------
+        masterDict : ...
+        
+        Examples
+        --------
+        >>> ...
+        
+        """
+    #@lru_cache(maxsize=params.maxcache)
+    def get_masterDict(self):
+        
+        # If master-list file does not exist locally, download
+        if not os.path.isfile(self.filepath):
+            
+            # Download master-list
+            masterDict = query.download_master(self.master_type)
+            
+            # Save locally
+            if len(masterDict) > 0:
+                pickle.dump( masterDict, open( filepath, "wb" ) )
+        
+        # Open local file
+        return pickle.load( open( self.filepath, "rb" ) )
+
+
 
 
 
@@ -93,88 +173,15 @@ class MPCFile(MPCMasterFile):
 
 
 
-"""
-Master file object:
- - Provides dictionary of online locations from which specific data can be downloaded 
- 
-If master-file does *NOT* exist, attempts to dowload
-Once master-file exists, provides look-up dictionary, "masterDict"
-
-#  Not super-necessary to have it as an object, is barely used ...
-
-"""
-class MPCMasterFile(object):
-    
-    """
-    Instantiates & populates an instance of an MPCMasterFile object
-     - masterDict is the content of most-interest
-    
-    Parameters
-    ----------
-    master_type : ...
-    
-    Returns
-    -------
-    self.filepath : ...
-    self.masterDict : ...
-    
-    Examples
-    --------
-    >>> ...
-    
-    """
-    def __init__(self, master_type):#, **kwds):
-        # Initiating does *EVERYTHING*, including calling "get_masterDict()"
-        if master_type in fileDict:
-            self.master_type =  master_type
-        else:
-            sys.exit("Supplied master_type, %s, is not in fileDict" % master_type )
-        self.filepath    = params.fileDict[self.master_type]
-        self.masterDict  = self.get_masterDict(self.filepath, self.master_type)
-    
-    def __str__(self):
-        return 'MPCFileObject class : %s' % self.filename
-
-
-    """
-    Download and/or open a file containing the master-list of data sources
-    
-    Parameters
-    ----------
-    filename : ...
-    master_type : ...
-    
-    Returns
-    -------
-    masterDict : ...
-    
-    Examples
-    --------
-    >>> ...
-    
-    """
-    #@lru_cache(maxsize=params.maxcache)
-    def get_masterDict(self):
-
-        # If master-list file does not exist locally, download
-        if not os.path.isfile(self.filepath):
-            
-            # Download master-list
-            masterDict = query.download_master(self.master_type)
-
-            # Save locally
-            if len(masterDict) > 0:
-                pickle.dump( masterDict, open( filepath, "wb" ) )
-                
-        # Open local file
-        return pickle.load( open( self.filepath, "rb" ) )
 
 
 
 
 
-
-
+if __name__ == "__main__":
+    print("Executing as main program")
+    print("Value of __name__ is: ", __name__)
+    #return True
 
 
 

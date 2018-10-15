@@ -5,9 +5,8 @@
 import os
 
 # Import the specific package/module/function we are testing
-import mpcdata.params as params
-
-
+# import mpcdata.params as params
+from .context import mpcdata
 
 def test_required_dictionaries_exist():
     """

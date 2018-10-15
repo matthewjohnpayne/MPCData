@@ -1,10 +1,12 @@
 # mpcdata/mpcdata/query.py
 
+# Third-party imports
 import json
 import urllib.request
-
-import params
 import requests
+
+# Import local modules
+import params as params
 
 
 """

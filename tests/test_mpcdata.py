@@ -88,10 +88,13 @@ def test_MPCFile_external():
     # Calling get_filedata() method should cause the file to come into existence
     filedata = MPCF.get_filedata()
     assert os.path.exists(filepath)
-    assert filedata = MPCF.filedata
+    assert filedata == MPCF.filedata
 
     # The 'leap-seconds.txt' file is expected to contain the string '2272060800' at some point
-    IN = False ; for item in filedata: if '2272060800' in item: IN = True
+    IN = False
+    for item in filedata:
+        if '2272060800' in item:
+            IN = True
     assert IN
 
     # Running MPCF.get_filedata() again should just cause a fileread (no download)
@@ -133,7 +136,7 @@ def test_MPCFile_internal():
     # Calling get_filedata() method should cause the file to come into existence
     filedata = MPCF.get_filedata()
     assert os.path.exists(filepath)
-    assert filedata = MPCF.filedata
+    assert filedata == MPCF.filedata
     
     # The 'leap-seconds.txt' file is expected to contain the string '2272060800' at some point
     IN = False ; for item in filecontents: if '2272060800' in item: IN = True
