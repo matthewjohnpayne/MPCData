@@ -1,0 +1,1 @@
+{"leap-seconds": "https://www.ietf.org/timezones/data/leap-seconds.list"}
