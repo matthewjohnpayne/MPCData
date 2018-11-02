@@ -14,10 +14,10 @@ urlIDDict = {
         'Google': ('https://docs.google.com/uc?export=download','1XZ-M-b5XE_MkHlGiwlDL-7J7e9mKtQzh' ) ,
         'MPC':'',
     },
-    'internal' : {
-        'Zenodo': '',
-        'Google':'',
-        'MPC':'',
-    }
+    #'internal' : {
+    #    'Zenodo': '',
+    #    'Google':'',
+    #    'MPC':'',
+    #}
 }
 

@@ -17,7 +17,9 @@ failureDict = {'Fail':'Fail'}
 
 
 
-"""
+
+def download_master(master_type):
+    """
     Make repeated attempts to download a "master list" (in JSON format) from a variety of sources.
     Manage failure
     
@@ -33,9 +35,7 @@ failureDict = {'Fail':'Fail'}
     --------
     >>> ...
     
-"""
-def download_master(master_type):
-    
+    """
     # Allow easy management/detection of download-failure
     masterDict = failureDict.copy()
     
@@ -62,24 +62,25 @@ def download_master(master_type):
 
 
 
-"""
+def query_Master_Archive(master_type , archive):
+    """
     Make a one-off attempt to download a "master list" (in JSON format) from one of Zenodo/Google/MPC
-
+    
     Parameters
     ----------
     master_type : one from ['external','internal',...]
     archive : one from ['Zenodo','Google','MPC']
-
+    
     Returns
     -------
     ...
-
+    
     Examples
     --------
     >>> ...
     
-"""
-def query_Master_Archive(master_type , archive):
+    """
+
     # Default to failure ...
     masterDict  = failureDict.copy()
     
@@ -128,10 +129,12 @@ def query_Master_Archive(master_type , archive):
     return masterDict
 
 
-"""
+
+def download_master_file_from_google_drive(url, ID):
+    """
     Convenience function to download a file from google drive and save it to file
     # https://github.com/nsadawi/Download-Large-File-From-Google-Drive-Using-Python/blob/master/Download-Large-File-from-Google-Drive.ipynb
-
+    
     Parameters
     ----------
     url :
@@ -145,9 +148,7 @@ def query_Master_Archive(master_type , archive):
     --------
     >>> ...
     
-"""
-def download_master_file_from_google_drive(url, ID):
-    
+    """
     session = requests.Session()
     response   = session.get(url, params = { 'id' : id }, stream = True)
     
@@ -157,7 +158,9 @@ def download_master_file_from_google_drive(url, ID):
 
 
 
-"""
+
+def read_json_from_url(url):
+    """
     Convenience function to read a json-formatted-URL into a JSON-object
     
     Parameters
@@ -173,13 +176,14 @@ def download_master_file_from_google_drive(url, ID):
     >>> ...
     
     """
-def read_json_from_url(url):
     webURL    = urllib.request.urlopen(url)
     encoding  = webURL.info().get_content_charset('utf-8')
     JSON_object = json.loads(webURL.read().decode(encoding))
     return JSON_object
 
-"""
+
+def data_item_download(itemURL, itemFILEPATH):
+    """
     Convenience function to download an arbitrary url and save it to file
     
     Parameters
@@ -196,7 +200,6 @@ def read_json_from_url(url):
     >>> ...
     
     """
-def data_item_download(itemURL, itemFILEPATH):
     return urllib.request.urlretrieve(itemURL, itemFILEPATH )
 
 

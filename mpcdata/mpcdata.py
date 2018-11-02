@@ -9,7 +9,9 @@ import pickle
 import mpcdata.params as params
 import mpcdata.query as query
 
-"""
+
+class MPCMasterFile(object):
+    """
     Master file object:
     - Provides dictionary of online locations from which specific data can be downloaded
     
@@ -19,9 +21,9 @@ import mpcdata.query as query
     #  Not super-necessary to have it as an object, is barely used ...
     
     """
-class MPCMasterFile(object):
     
-    """
+    def __init__(self, master_type):#, **kwds):
+        """
         Instantiates & populates an instance of an MPCMasterFile object
         - masterDict is the content of most-interest
         
@@ -39,7 +41,7 @@ class MPCMasterFile(object):
         >>> ...
         
         """
-    def __init__(self, master_type):#, **kwds):
+            
         # Initiating does *EVERYTHING*, including calling "get_masterDict()"
         if master_type in params.fileDict:
             self.master_type =  master_type
@@ -48,11 +50,18 @@ class MPCMasterFile(object):
         self.filepath    = params.fileDict[self.master_type]
         self.masterDict  = self.get_masterDict()
     
+    
     def __str__(self):
+        """
+            Standard return of name
+        """
         return 'MPCFileObject class : %s' % self.filename
     
     
-    """
+
+    #@lru_cache(maxsize=params.maxcache)
+    def get_masterDict(self):
+        """
         Download and/or open a file containing the master-list of data sources
         
         Parameters
@@ -69,8 +78,6 @@ class MPCMasterFile(object):
         >>> ...
         
         """
-    #@lru_cache(maxsize=params.maxcache)
-    def get_masterDict(self):
         
         # If master-list file does not exist locally, download
         if not os.path.isfile(self.filepath):
@@ -89,60 +96,72 @@ class MPCMasterFile(object):
 
 
 
-"""
-Generalized file object for MPC data
-If file does *NOT* exist, attempts to dowload
-Once file exists, allows data extraction
 
-"""
-class MPCFile(MPCMasterFile):
+class MPCFile(object):
+    """
+    Generalized file object for MPC data
+    If file does *NOT* exist, attempts to dowload
+    Once file exists, allows data extraction
     
     """
-    Instantiates & populates an instance of an MPCFile object
-    - masterDict is the content of most-interest
-    
-    Parameters
-    ----------
-    filename : ...
-     : ...
-    
-    Returns
-    -------
-    self.master_type : ...
-    self.filepath : ...
-    self.masterDict : ...
-    
-    Examples
-    --------
-    >>> ...
-    
-    """
+
     def __init__(self, filename):#, **kwds):
+        """
+        Instantiates & populates an instance of an MPCFile object
+        - masterDict is the content of most-interest
         
+        Parameters
+        ----------
+        filename : ...
+        : ...
+        
+        Returns
+        -------
+        self.master_type : ...
+        self.filepath : ...
+        self.masterDict : ...
+        
+        Examples
+        --------
+        >>> ...
+            
+        """
         self.filename                     = filename
         self.master_type, self.masterDict = self.set_master(self.filename)
         self.filepath                     = os.path.join(params.dirDict[self.master_type], self.filename)
         # self.filedata                     = self.get_filedata() ## <<-- Not doing at initialisation: just as optional call
     
+    
     def __str__(self):
-        return 'MPCFileObject class : %s' % self.filename
+        """
+        Standard return of name
+        """
+        return 'MPCFile-Object class : %s' % self.filename
+
 
     #@lru_cache(maxsize=params.maxcache)
     def set_master(self, filename):
+        """
+        *** NEED TO DOCUMENT THE FUNCTION ***
+        """
+
+
         # Default values
         master_type = str(None)
         masterDict  = {}
-        
+        print("filename ", filename)
         # Get all possible master-types
         for loop_master_type in params.urlIDDict:
-            
+            print("loop_master_type: ",loop_master_type )
             # Get associated masterDict for given loop_master_type
             masterDict = MPCMasterFile(loop_master_type).get_masterDict()
-            
+            print("masterDict= " , masterDict)
+            print(filename in masterDict)
             # If filename in masterDict, then that sets the master_type
             if filename in masterDict :
                 master_type = loop_master_type
                 masterDict  = masterDict
+                print("HERE")
 
         # If no master-type set, then requested file is presumably unknown ...
         # ... (or needs to be added to one of the Master files)
@@ -154,6 +173,9 @@ class MPCFile(MPCMasterFile):
 
     #@lru_cache(maxsize=params.maxcache)
     def get_filedata():
+        """
+            *** NEED TO DOCUMENT THE FUNCTION ***
+        """
 
         # If file does not exist locally, download
         if not os.path.isfile(self.filepath):
